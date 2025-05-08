@@ -1,10 +1,9 @@
 {
-    "name": "LLama",
+    "name": "llama",
 
-    "model": "groq/llama-3.3-70b-versatile",
+    "model": "groq/",
 
-    "max_tokens": 4000,
+    "max_tokens": 4000
 
-    "embedding": "openai"
-    
+
 }

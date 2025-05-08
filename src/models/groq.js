@@ -57,7 +57,9 @@ export class GroqCloudAPI {
 
             res = completion.choices[0].message;
 
-            res = res.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+            res = res['content'];  // This is the actual text response from the model.
+
+            // res = res.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
         }
         catch(err) {
             if (err.message.includes("content must be a string")) {
