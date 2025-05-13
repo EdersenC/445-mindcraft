@@ -1,3 +1,21 @@
+import fs from 'fs';
+import path from 'path';
+
+function getProfiles(dir) {
+
+    const profilesDir = path.join(dir, 'infinity');
+    const profiles = [];
+    fs.readdirSync(profilesDir).forEach(file => {
+        if (file.endsWith('.json')) {
+            profiles.push('.\\'+path.join(profilesDir, file));
+        }
+    });
+
+    console.log(profiles);
+    return profiles;
+}
+
+getProfiles('./profiles/');
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -27,12 +45,12 @@ export async function duplicateProfiles(sourcePath) {
   return newPaths;
 }
 
-const extra = await duplicateProfiles('./profiles/ogemma.json')
+const extra = await duplicateProfiles('./profiles/ogemma.json') // use if this you want, dont if you dont. Or don't use it even if you want to, I'm not your mom.
 
 
 const settings = {
     "minecraft_version": "1.21.1", // supports up to 1.21.1
-    "host": "127.0.0.1", // or "localhost", "your.ip.
+    "host": "192.168.1.215", // or "localhost", "your.ip.
     // address.here"
     "port": 25565,
     "auth": "offline", // or "microsoft"
@@ -50,14 +68,13 @@ const settings = {
         // "./profiles/claude.json",
         // "./profiles/gemini.json",
         // "./profiles/freeguy.json",
-        //"./profiles/llama.json", // llama3.1
+        "./profiles/llama.json", // llama3.1
         // "./profiles/qwen.json",
-        //"./profiles/grok.json",
+        "./profiles/grok.json",
+        // ...extra, // add the extra profiles here if the conditions are met (see comment on line 48)
         // "./profiles/mistral.json",
         // "./profiles/deepseek.json",
-	"./profiles/groq.json",
-    "./profiles/gemma.json",
-    ...extra,
+
         // using more than 1 profile requires you to /msg each bot indivually
         // individual profiles override values from the base profile
     ],
@@ -74,8 +91,8 @@ const settings = {
     "code_timeout_mins": -1, // minutes code is allowed to run. -1 for no timeout
     "relevant_docs_count": 5, // number of relevant code function docs to select for prompting. -1 for all
 
-    "max_messages": 30, // max number of messages to keep in context
-    "num_examples": 15, // number of examples to give to the model
+    "max_messages": 20, // max number of messages to keep in context
+    "num_examples": 10, // number of examples to give to the model
     "max_commands": -1, // max number of commands that can be used in consecutive responses. -1 for no limit
     "verbose_commands": true, // show full command syntax
     "narrate_behavior": true, // chat simple automatic actions ('Picking up item!')
