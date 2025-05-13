@@ -1,8 +1,40 @@
+import { promises as fs } from 'fs';
+import path from 'path';
+
+
+const phoneticAlphabet = ['Charlie', 'Delta'] 
+    
+//     'Echo',    'Foxtrot',
+//     'Golf',   'Hotel',   'India',   'Juliet', 'Kilo',    'Lima',
+//     'Mike',   'November','Oscar',   'Papa',   'Quebec',  'Romeo',
+//     'Sierra', 'Tango',   'Uniform', 'Victor', 'Whiskey', 'X-ray',
+//     'Yankee', 'Zulu'
+//   ];
+
+export async function duplicateProfiles(sourcePath) {
+  const { dir, name: base, ext } = path.parse(sourcePath);
+  const original = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
+
+  const newPaths = [];
+  for (let i = 0; i < phoneticAlphabet.length; i++) {
+    let rel = path.posix.join(dir.replace(/^\.?[\\/]/, ''), `${base}${i + 2}${ext}`); // lol (convert from windows to posix path and insert goodies)
+    if (!rel.startsWith('./')) rel = `./${rel}`;
+
+    const updated = { ...original, name: phoneticAlphabet[i] };
+    await fs.writeFile(rel, JSON.stringify(updated, null, 2), 'utf8');
+    newPaths.push(rel);
+  }
+  return newPaths;
+}
+
+const extra = await duplicateProfiles('./profiles/ogemma.json')
+
+
 const settings = {
     "minecraft_version": "1.21.1", // supports up to 1.21.1
     "host": "127.0.0.1", // or "localhost", "your.ip.
     // address.here"
-    "port": 55916,
+    "port": 25565,
     "auth": "offline", // or "microsoft"
 
     // the mindserver manages all agents and hosts the UI
@@ -18,18 +50,20 @@ const settings = {
         // "./profiles/claude.json",
         // "./profiles/gemini.json",
         // "./profiles/freeguy.json",
-        "./profiles/llama.json", // llama3.1
+        //"./profiles/llama.json", // llama3.1
         // "./profiles/qwen.json",
-        "./profiles/grok.json",
+        //"./profiles/grok.json",
         // "./profiles/mistral.json",
         // "./profiles/deepseek.json",
-
+	"./profiles/groq.json",
+    "./profiles/gemma.json",
+    ...extra,
         // using more than 1 profile requires you to /msg each bot indivually
         // individual profiles override values from the base profile
     ],
     "load_memory": false, // load memory from previous session
-    "init_message": "Respond with hello world and your name", // sends to all on spawn
-    "only_chat_with": [], // users that the bots listen to and send general messages to. if empty it will chat publicly
+    "init_message": "Respond with 9+10=21 and you name.", // sends to all on spawn
+    "only_chat_with": ['CEsection', "EddYeti"], // users that the bots listen to and send general messages to. if empty it will chat publicly
     "speak": false, // allows all bots to speak through system text-to-speech. works on windows, mac, on linux you need to `apt install espeak`
     "language": "en", // translate to/from this language. Supports these language names: https://cloud.google.com/translate/docs/languages
     "show_bot_views": false, // show bot's view in browser at localhost:3000, 3001...

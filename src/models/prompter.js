@@ -140,7 +140,7 @@ export class Prompter {
                 profile.api = 'openrouter'; // must do first because shares names with other models
             else if (profile.model.includes('ollama/'))
                 profile.api = 'ollama'; // also must do early because shares names with other models
-            else if (profile.model.includes('gemini'))
+            else if (profile.model.includes('gemini') || profile.model.includes('gemma'))
                 profile.api = 'google';
             else if (profile.model.includes('vllm/'))
                 profile.api = 'vllm';
